@@ -19,7 +19,7 @@ const criaController = jogo => {
         try {
             jogo.setPalavraSecreta($entrada.val().trim());
             $entrada.val('');
-            mudaPlaceHolder('chuta');
+            mudaPlaceHolder('chute');
             exibeLacunas();
         } catch(err) {
             alert(err.message);

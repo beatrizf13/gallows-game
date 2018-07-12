@@ -8,7 +8,6 @@ const createSprite = selector => {
     const hasNext = () => current + 1 <= last;
 
     const nextFrame = () => {
-
         if (hasNext()) moveFrame(frames[current], frames[++current]);
     };
 

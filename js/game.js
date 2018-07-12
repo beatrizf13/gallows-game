@@ -22,7 +22,7 @@ const criaJogo =  sprite => {
     };
 
     const processaChute = chute => {
-        if (!chute.trim()) throw Error('Chute vazio');
+        if (!chute.trim()) throw Error('Chute vazio :|');
 
         const exp = new RegExp(chute, 'gi');
         let resultado, acertou = false;
@@ -43,7 +43,7 @@ const criaJogo =  sprite => {
     const proximaEtapa = () => etapa = 2;
 
     const setPalavraSecreta = palavra => {
-        if (!palavra.trim()) throw Error('Palavra vazia');
+        if (!palavra.trim()) throw Error('Palavra vazia :|');
 
         palavraSecreta = palavra;
         criaLacunas();
