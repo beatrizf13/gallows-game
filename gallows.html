@@ -21,7 +21,6 @@
 
         <div class="text-center">
         <input id="entrada"
-            class="entrada"
             placeholder="Palavra secreta" autofocus>
         </div>
     </div>
@@ -29,6 +28,14 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/sprite.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/controller.js"></script>
+    <script>
+        criaController(
+            criaJogo(
+                createSprite('.sprite')
+            )
+        ).inicia();
+    </script>
 
 </body>
 </html>
