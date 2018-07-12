@@ -16,6 +16,8 @@ var criaJogo = function (sprite) {
 
     // guarda a palavra secreta, cria as lacunas e vai para a próxima etapa
     var setPalavraSecreta = function (palavra) {
+        if(!palavra.trim()) throw Error('Palavra em branco! :/');
+
         palavraSecreta = palavra;
         criaLacunas();
         proximaEtapa();
@@ -32,6 +34,8 @@ var criaJogo = function (sprite) {
     };
 
     var processaChute = function (chute) {
+        if(!chute.trim()) throw Error('Chute em branco! :/');
+
         var exp = new RegExp(chute, 'gi')
         , resultado
         , acertou = false;

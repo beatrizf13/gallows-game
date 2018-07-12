@@ -14,35 +14,39 @@ var criaController = function (jogo) {
     };
 
     var mudaPlaceHolder = function (texto) {
-        $entrada
-            .val('')
-            .attr('placeholder', texto);
+        $entrada.attr('placeholder', texto);
     };
 
     var guardaPalavraSecreta = function () {
-        jogo.setPalavraSecreta($entrada.val().trim());
-        $entrada.val('');
-        exibeLacunas();
-        mudaPlaceHolder('chute');
+        try {
+            jogo.setPalavraSecreta($entrada.val().trim());
+            $entrada.val('');
+            mudaPlaceHolder('chuta');
+            exibeLacunas();
+        } catch(err) {
+            alert(err.message);
+        }
     };
 
     var leChute = function () {
-        var chute = $entrada.val().trim().substr(0, 1);
-        $entrada.val('');
-        jogo.processaChute(chute);
-        exibeLacunas();
+        try {
+            jogo.processaChute($entrada.val().trim().substr(0, 1));
+            $entrada.val('');
+            exibeLacunas();
 
-        if (jogo.ganhouOuPerdeu()) {
+            if(jogo.ganhouOuPerdeu()) {
 
-            setTimeout(function () {
-                if (jogo.ganhou()) {
-                    alert('Ganhou!');
-                } else if (jogo.perdeu()) {
-                    alert('Perdeu! :p');
-                }
-                jogo.reinicia();
-                reinicia();
-            }, 200);
+                setTimeout(function() {
+                    if(jogo.ganhou()) {
+                        alert('Ganhou! :D');
+                    } else if (jogo.perdeu()) {
+                        alert('Perdeu! :P');
+                    }
+                    reinicia();
+                }, 200);
+            }
+        } catch(err) {
+            alert(err.message);
         }
     };
 
