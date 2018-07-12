@@ -14,15 +14,12 @@ function createSprite(selector) {
     $el.addClass(frames[current]);
 
     function moveFrame (from, to) {
-
         $el.removeClass(from)
             .addClass(to);
     }
 
     function nextFrame() {
-
-        if(++current == last) return;
-
+        if(current==last) return;
         moveFrame(frames[current], frames[++current]);
     }
 
