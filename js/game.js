@@ -1,14 +1,26 @@
-var criaJogo = function () {
+var criaJogo = function (sprite) {
 
     var etapa = 1;
-    var lacunas = [];
     var palavraSecreta = '';
+    var lacuna = [];
+
+    var processaChute = function (chute) {
+
+        var exp = new RegExp(chute, 'gi')
+            , resultado
+            , acertou = false;
+
+        while (resultado = exp.exec(palavraSecreta)) {
+
+            acertou = lacunas[resultado.index] = chute;
+        }
+
+       if (!acertou) sprite.nextFrame();
+    };
 
     // adiciona uma lacuna em branco para cada letra da palavraSecreta
     var criaLacunas = function () {
-        for (let i = 0; i < palavraSecreta.length; i++) {
-            lacunas.push('');
-        }
+        lacunas = Array(palavraSecreta.length).fill('');
     };
 
     // muda o estado da variável etapa para indicar a próxima e última etapa
@@ -41,6 +53,7 @@ var criaJogo = function () {
     return {
         setPalavraSecreta: setPalavraSecreta,
         getLacunas: getLacunas,
-        getEtapa: getEtapa
+        getEtapa: getEtapa,
+        processaChute: processaChute
     }
 };
