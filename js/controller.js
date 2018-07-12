@@ -1,4 +1,5 @@
 var criaController = function (jogo) {
+
     var $entrada = $('#entrada');
     var $lacunas = $('.lacunas');
 
@@ -7,13 +8,15 @@ var criaController = function (jogo) {
         jogo.getLacunas().forEach(function (lacuna) {
             $('<li>')
                 .addClass('lacuna')
-                .append(lacuna)
+                .text(lacuna)
                 .appendTo($lacunas);
         });
     };
 
     var mudaPlaceHolder = function (texto) {
-        $entrada.attr('placeholder', texto);
+        $entrada
+            .val('')
+            .attr('placeholder', texto);
     };
 
     var guardaPalavraSecreta = function () {
@@ -28,6 +31,25 @@ var criaController = function (jogo) {
         $entrada.val('');
         jogo.processaChute(chute);
         exibeLacunas();
+
+        if (jogo.ganhouOuPerdeu()) {
+
+            setTimeout(function () {
+                if (jogo.ganhou()) {
+                    alert('Ganhou!');
+                } else if (jogo.perdeu()) {
+                    alert('Perdeu! :p');
+                }
+                jogo.reinicia();
+                reinicia();
+            }, 200);
+        }
+    };
+
+    var reinicia = function () {
+        $lacunas.empty();
+        mudaPlaceHolder('Palavra secreta');
+        jogo.reinicia();
     };
 
     var inicia = function () {
@@ -44,5 +66,6 @@ var criaController = function (jogo) {
             }
         });
     };
+
     return { inicia: inicia };
 };
