@@ -1,92 +1,67 @@
-var criaJogo = function (sprite) {
+const criaJogo =  sprite => {
 
-    var etapa = 1;
-    var palavraSecreta = '';
-    var lacuna = [];
+    let palavraSecreta = '';
+    let lacunas = [];
+    let etapa = 1;
 
-    // adiciona uma lacuna em branco para cada letra da palavraSecreta
-    var criaLacunas = function () {
-        lacunas = Array(palavraSecreta.length).fill('');
+    const ganhou =  () => lacunas.length
+            ? !lacunas.some(function (lacuna) {
+                return lacuna == '';
+            })
+            : false;
+
+    const perdeu = () => sprite.isFinished();
+
+    const ganhouOuPerdeu = () => ganhou() || perdeu();
+
+    const reinicia = () => {
+        etapa = 1;
+        lacunas = [];
+        palavraSecreta = '';
+        sprite.reset();
     };
 
-    // muda o estado da variável etapa para indicar a próxima e última etapa
-    var proximaEtapa = function () {
-        etapa = 2;
+    const processaChute = chute => {
+        if (!chute.trim()) throw Error('Chute vazio');
+
+        const exp = new RegExp(chute, 'gi');
+        let resultado, acertou = false;
+
+        while (resultado = exp.exec(palavraSecreta)) {
+            acertou = lacunas[resultado.index] = chute;
+        }
+
+        if (!acertou) sprite.nextFrame();
     };
 
-    // guarda a palavra secreta, cria as lacunas e vai para a próxima etapa
-    var setPalavraSecreta = function (palavra) {
-        if(!palavra.trim()) throw Error('Palavra em branco! :/');
+    const criaLacunas = () => {
+        for (let i = 0; i < palavraSecreta.length; i++) {
+            lacunas.push('');
+        }
+    };
+
+    const proximaEtapa = () => etapa = 2;
+
+    const setPalavraSecreta = palavra => {
+        if (!palavra.trim()) throw Error('Palavra vazia');
 
         palavraSecreta = palavra;
         criaLacunas();
         proximaEtapa();
     };
 
-    // única maneira de termos acesso às lacunas fora da função `criaJogo()`
-    var getLacunas = function () {
-        return lacunas;
-    };
+    const getLacunas = () => lacunas;
 
-    // permite consultar em qual etapa o jogo se encontra
-    var getEtapa = function () {
-        return etapa;
-    };
-
-    var processaChute = function (chute) {
-        if(!chute.trim()) throw Error('Chute em branco! :/');
-
-        var exp = new RegExp(chute, 'gi')
-        , resultado
-        , acertou = false;
-
-        while (resultado = exp.exec(palavraSecreta)){
-            lacunas[resultado.index] = chute;
-            acertou = true;
-        }
-
-        if (!acertou) sprite.nextFrame();
-    };
-
-
-    var ganhou = function () {
-        // var ganhou = false;
-        // for(var i=0; i< palavraSecreta.length; i++){
-        //     if(lacunas[i] != palavraSecreta[i]) return ganhou;
-        // }
-        // ganhou = true;
-        // return ganhou;
-
-        return lacunas.length
-            ? !lacunas.some(function(lacuna) {
-                return lacuna == '';
-            })
-            : false;
-    };
-
-    var perdeu = function () {
-        return sprite.isFinished();
-
-    };
-
-    var ganhouOuPerdeu = function () {
-        return ganhou() || perdeu();
-    };
-
-    var reinicia = function () {
-        sprite.reset();
-        palavraSecreta = '0';
-        lacunas = [];
-    };
+    const getEtapa = () => etapa;
 
     return {
-        setPalavraSecreta: setPalavraSecreta,
-        getLacunas: getLacunas,
-        getEtapa: getEtapa,
-        processaChute: processaChute,
-        ganhou: ganhou,
-        perdeu: perdeu,
-        ganhouOuPerdeu: ganhouOuPerdeu,
-        reinicia: reinicia
-    }
+        setPalavraSecreta,
+        getLacunas,
+        getEtapa,
+        processaChute,
+        ganhou,
+        perdeu,
+        ganhouOuPerdeu,
+        reinicia
+    };
 };

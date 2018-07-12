@@ -1,9 +1,9 @@
-var criaController = function (jogo) {
+const criaController = jogo => {
 
-    var $entrada = $('#entrada');
-    var $lacunas = $('.lacunas');
+    const $entrada = $('.entrada');
+    const $lacunas = $('.lacunas');
 
-    var exibeLacunas = function () {
+    const exibeLacunas = () => {
         $lacunas.empty();
         jogo.getLacunas().forEach(function (lacuna) {
             $('<li>')
@@ -13,11 +13,9 @@ var criaController = function (jogo) {
         });
     };
 
-    var mudaPlaceHolder = function (texto) {
-        $entrada.attr('placeholder', texto);
-    };
+    const mudaPlaceHolder = texto => $entrada.attr('placeholder', texto);
 
-    var guardaPalavraSecreta = function () {
+    const guardaPalavraSecreta = () => {
         try {
             jogo.setPalavraSecreta($entrada.val().trim());
             $entrada.val('');
@@ -28,15 +26,20 @@ var criaController = function (jogo) {
         }
     };
 
-    var leChute = function () {
+    const reinicia = () => {
+        jogo.reinicia();
+        $lacunas.empty();
+        mudaPlaceHolder('palavra secreta');
+    };
+
+    const leChute = () => {
         try {
             jogo.processaChute($entrada.val().trim().substr(0, 1));
             $entrada.val('');
             exibeLacunas();
 
             if(jogo.ganhouOuPerdeu()) {
-
-                setTimeout(function() {
+                setTimeout(() => {
                     if(jogo.ganhou()) {
                         alert('Ganhou! :D');
                     } else if (jogo.perdeu()) {
@@ -50,14 +53,8 @@ var criaController = function (jogo) {
         }
     };
 
-    var reinicia = function () {
-        $lacunas.empty();
-        mudaPlaceHolder('Palavra secreta');
-        jogo.reinicia();
-    };
-
-    var inicia = function () {
-        $entrada.keypress(function (event) {
+    const inicia = () => {
+        $entrada.keypress(event => {
             if (event.which == 13) {
                 switch (jogo.getEtapa()) {
                     case 1:
@@ -71,5 +68,5 @@ var criaController = function (jogo) {
         });
     };
 
-    return { inicia: inicia };
+    return { inicia };
 };
