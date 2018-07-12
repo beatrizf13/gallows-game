@@ -4,20 +4,6 @@ var criaJogo = function (sprite) {
     var palavraSecreta = '';
     var lacuna = [];
 
-    var processaChute = function (chute) {
-
-        var exp = new RegExp(chute, 'gi')
-            , resultado
-            , acertou = false;
-
-        while (resultado = exp.exec(palavraSecreta)) {
-
-            acertou = lacunas[resultado.index] = chute;
-        }
-
-       if (!acertou) sprite.nextFrame();
-    };
-
     // adiciona uma lacuna em branco para cada letra da palavraSecreta
     var criaLacunas = function () {
         lacunas = Array(palavraSecreta.length).fill('');
@@ -25,7 +11,7 @@ var criaJogo = function (sprite) {
 
     // muda o estado da variável etapa para indicar a próxima e última etapa
     var proximaEtapa = function () {
-        etapa++;
+        etapa = 2;
     };
 
     // guarda a palavra secreta, cria as lacunas e vai para a próxima etapa
@@ -45,15 +31,58 @@ var criaJogo = function (sprite) {
         return etapa;
     };
 
-    /*
-    Tornou acessível apenas as funções que fazem sentido serem chamadas por quem utilizar nosso jogo.
-        A função `proximaEtapa()` é de uso interno e só foi criada para melhorar a legibilidade e manutenção do código, a
-        mesma coisa para a função `criaLacunas()`.
-    */
+    var processaChute = function (chute) {
+        var exp = new RegExp(chute, 'gi')
+        , resultado
+        , acertou = false;
+
+        while (resultado = exp.exec(palavraSecreta)){
+            lacunas[resultado.index] = chute;
+            acertou = true;
+        }
+
+        if (!acertou) sprite.nextFrame();
+    };
+
+
+    var ganhou = function () {
+        // var ganhou = false;
+        // for(var i=0; i< palavraSecreta.length; i++){
+        //     if(lacunas[i] != palavraSecreta[i]) return ganhou;
+        // }
+        // ganhou = true;
+        // return ganhou;
+
+        return lacunas.length
+            ? !lacunas.some(function(lacuna) {
+                return lacuna == '';
+            })
+            : false;
+    };
+
+    var perdeu = function () {
+        return sprite.isFinished();
+
+    };
+
+    var ganhouOuPerdeu = function () {
+        return ganhou() || perdeu();
+    };
+
+    var reinicia = function () {
+        sprite.reset();
+        palavraSecreta = '0';
+        lacunas = [];
+    };
+
     return {
         setPalavraSecreta: setPalavraSecreta,
         getLacunas: getLacunas,
         getEtapa: getEtapa,
-        processaChute: processaChute
+        processaChute: processaChute,
+        ganhou: ganhou,
+        perdeu: perdeu,
+        ganhouOuPerdeu: ganhouOuPerdeu,
+        reinicia: reinicia
     }
 };
